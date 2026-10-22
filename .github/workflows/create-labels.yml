@@ -1,0 +1,30 @@
+# Taruh file ini di repo pada path: .github/workflows/create-labels.yml
+# Taruh juga labels.json di root repo.
+# Lalu buka tab Actions di GitHub -> "Create labels" -> Run workflow.
+# Tidak perlu install apa pun di komputer.
+
+name: Create labels
+
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  labels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create or update labels from labels.json
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          jq -c '.[]' labels.json | while read -r l; do
+            name=$(echo "$l" | jq -r '.name')
+            color=$(echo "$l" | jq -r '.color')
+            desc=$(echo "$l" | jq -r '.description')
+            gh label create "$name" --color "$color" --description "$desc" --force --repo "$GITHUB_REPOSITORY"
+          done
