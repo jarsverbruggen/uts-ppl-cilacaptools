@@ -1,0 +1,262 @@
+[
+  {
+    "name": "severity: critical",
+    "color": "b60205",
+    "description": "Fitur utama gagal total / data hilang / checkout tidak bisa diselesaikan"
+  },
+  {
+    "name": "severity: major",
+    "color": "d93f0b",
+    "description": "Fitur penting salah atau tidak berfungsi, ada workaround terbatas"
+  },
+  {
+    "name": "severity: minor",
+    "color": "fbca04",
+    "description": "Fitur berfungsi tetapi ada penyimpangan kecil, workaround mudah"
+  },
+  {
+    "name": "severity: trivial",
+    "color": "c5def5",
+    "description": "Kosmetik / typo, tanpa dampak fungsional"
+  },
+  {
+    "name": "priority: P1",
+    "color": "d73a4a",
+    "description": "Harus diperbaiki segera, menghalangi rilis"
+  },
+  {
+    "name": "priority: P2",
+    "color": "e99695",
+    "description": "Harus diperbaiki sebelum rilis"
+  },
+  {
+    "name": "priority: P3",
+    "color": "f9d0c4",
+    "description": "Diperbaiki jika waktu memungkinkan"
+  },
+  {
+    "name": "priority: P4",
+    "color": "ededed",
+    "description": "Backlog / dapat ditunda"
+  },
+  {
+    "name": "type: functional",
+    "color": "1d76db",
+    "description": "Perilaku fitur berbeda dari versi tanpa bug"
+  },
+  {
+    "name": "type: validation",
+    "color": "0e8a16",
+    "description": "Validasi input salah (EP/BVA, batas panjang atau angka)"
+  },
+  {
+    "name": "type: calculation",
+    "color": "0052cc",
+    "description": "Kalkulasi harga, total, diskon, atau pajak salah"
+  },
+  {
+    "name": "type: navigation",
+    "color": "5319e7",
+    "description": "Link, redirect, tombol Back, atau paginasi bermasalah"
+  },
+  {
+    "name": "type: ui-layout",
+    "color": "bfd4f2",
+    "description": "Tampilan atau tata letak rusak"
+  },
+  {
+    "name": "type: js-error",
+    "color": "ee0701",
+    "description": "Ada error JavaScript di console"
+  },
+  {
+    "name": "type: data",
+    "color": "006b75",
+    "description": "Data tampil salah, tidak tersimpan, atau tidak sinkron"
+  },
+  {
+    "name": "type: compatibility",
+    "color": "7057ff",
+    "description": "Perbedaan perilaku antar browser atau viewport"
+  },
+  {
+    "name": "type: accessibility",
+    "color": "a2eeef",
+    "description": "Pelanggaran aksesibilitas (WCAG / keyboard / screen reader)"
+  },
+  {
+    "name": "area: home",
+    "color": "c2e0c6",
+    "description": "Beranda (Home)"
+  },
+  {
+    "name": "area: login",
+    "color": "c2e0c6",
+    "description": "Alur login"
+  },
+  {
+    "name": "area: katalog-daftar",
+    "color": "c2e0c6",
+    "description": "Katalog - Daftar Produk"
+  },
+  {
+    "name": "area: katalog-pencarian",
+    "color": "c2e0c6",
+    "description": "Katalog - Pencarian"
+  },
+  {
+    "name": "area: katalog-filter",
+    "color": "c2e0c6",
+    "description": "Katalog - Filter (kategori, merek, harga)"
+  },
+  {
+    "name": "area: katalog-sorting",
+    "color": "c2e0c6",
+    "description": "Katalog - Pengurutan"
+  },
+  {
+    "name": "area: katalog-paginasi",
+    "color": "c2e0c6",
+    "description": "Katalog - Paginasi"
+  },
+  {
+    "name": "area: katalog-detail",
+    "color": "c2e0c6",
+    "description": "Katalog - Detail Produk"
+  },
+  {
+    "name": "found-by: EP-BVA",
+    "color": "fef2c0",
+    "description": "Equivalence Partitioning / Boundary Value Analysis"
+  },
+  {
+    "name": "found-by: error-guessing",
+    "color": "fef2c0",
+    "description": "Error guessing"
+  },
+  {
+    "name": "found-by: negative-testing",
+    "color": "fef2c0",
+    "description": "Negative testing / edge case"
+  },
+  {
+    "name": "found-by: exploratory",
+    "color": "fef2c0",
+    "description": "Exploratory testing (SBTM)"
+  },
+  {
+    "name": "found-by: cross-browser",
+    "color": "fef2c0",
+    "description": "Pengujian cross-browser atau responsive"
+  },
+  {
+    "name": "found-by: a11y-audit",
+    "color": "fef2c0",
+    "description": "Audit aksesibilitas (axe / WAVE / Lighthouse / keyboard)"
+  },
+  {
+    "name": "env: chrome",
+    "color": "f9f9f9",
+    "description": "Terjadi di Google Chrome"
+  },
+  {
+    "name": "env: firefox",
+    "color": "f9f9f9",
+    "description": "Terjadi di Mozilla Firefox"
+  },
+  {
+    "name": "env: edge",
+    "color": "f9f9f9",
+    "description": "Terjadi di Microsoft Edge"
+  },
+  {
+    "name": "env: mobile",
+    "color": "f9f9f9",
+    "description": "Terjadi di viewport mobile / emulator / perangkat nyata"
+  },
+  {
+    "name": "env: all-browsers",
+    "color": "f9f9f9",
+    "description": "Terjadi di semua browser yang diuji"
+  },
+  {
+    "name": "status: new",
+    "color": "ffffff",
+    "description": "Baru dilaporkan, belum ditriase"
+  },
+  {
+    "name": "status: need-info",
+    "color": "d4c5f9",
+    "description": "Perlu informasi tambahan dari pelapor"
+  },
+  {
+    "name": "status: triaged",
+    "color": "bfdadc",
+    "description": "Sudah ditriase, severity dan priority ditetapkan"
+  },
+  {
+    "name": "status: confirmed",
+    "color": "0e8a16",
+    "description": "Bug dikonfirmasi dan dapat direproduksi"
+  },
+  {
+    "name": "status: in-progress",
+    "color": "fbca04",
+    "description": "Sedang diperbaiki"
+  },
+  {
+    "name": "status: fixed",
+    "color": "5319e7",
+    "description": "Sudah diperbaiki, menunggu verifikasi"
+  },
+  {
+    "name": "status: verified",
+    "color": "0e8a16",
+    "description": "Perbaikan sudah diverifikasi QE"
+  },
+  {
+    "name": "status: reopened",
+    "color": "d93f0b",
+    "description": "Dibuka kembali karena perbaikan gagal"
+  },
+  {
+    "name": "status: duplicate",
+    "color": "cfd3d7",
+    "description": "Akar masalah sama dengan issue lain"
+  },
+  {
+    "name": "status: not-a-bug",
+    "color": "cfd3d7",
+    "description": "Perilaku sama dengan versi tanpa bug / sesuai desain"
+  },
+  {
+    "name": "gate: release-blocker",
+    "color": "000000",
+    "description": "Critical/Major terbuka, melanggar quality gate rilis"
+  },
+  {
+    "name": "intermittent",
+    "color": "e4e669",
+    "description": "Bug muncul tidak konsisten, sertakan screen recording"
+  },
+  {
+    "name": "sbtm-escalated",
+    "color": "ff7619",
+    "description": "Dieskalasi dari sesi exploratory testing (maks 2 per sesi)"
+  },
+  {
+    "name": "needs-recording",
+    "color": "e4e669",
+    "description": "Perlu bukti screen recording"
+  },
+  {
+    "name": "english-version-done",
+    "color": "c2e0c6",
+    "description": "Versi bahasa Inggris laporan sudah selesai"
+  },
+  {
+    "name": "linked-to-kiwi",
+    "color": "c2e0c6",
+    "description": "Sudah ditautkan ke eksekusi FAIL di Kiwi TCMS"
+  }
+]
