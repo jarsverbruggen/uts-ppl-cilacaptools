@@ -1,0 +1,95 @@
+# SESSION REPORT (SBTM - SESSION NOTES)
+## Sesi 1: Eksplorasi Alur Navigasi, Filter Bertingkat, dan Pencarian Ekstrim pada Katalog Produk
+
+---
+
+### A. Informasi Sesi
+* **Nomor Charter:** SBTM-CH-01 (Kiwi TC #196)
+* **Penguji (Tester):** m.fathoni (NPM: 230202020 / R3 - Exploratory Tester)
+* **Test Lead / Debriefer:** JarsV (R1 - QA Lead & Test Manager)
+* **Tanggal Pelaksanaan:** 22 Oktober 2026
+* **Waktu Mulai:** 09:00 WIB
+* **Waktu Selesai:** 09:30 WIB
+* **Total Durasi:** 30 Menit (Time-Boxed)
+* **Target Aplikasi (AUT):** `https://with-bugs.practicesoftwaretesting.com`
+* **Versi / Build:** Sprint 5 - Staging (Build 14)
+* **Lingkungan Pengujian:** Windows 11 64-bit, Google Chrome v129.0.6668.71, Resolusi 1920x1080
+
+---
+
+### B. Piagam Pengujian (Charter)
+) **Tujuan Charter:**  
+) Menjelajahi halaman beranda dan katalog produk (kategori Hand Tools, Power Tools, Others) dengan kombinasi filter bertingkat (kategori, brand, rentang harga slider), pencarian kata kunci acak/ekstrim, dan navigasi paginasi untuk mengidentifikasi cacat rendering grid, inkonsistensi counter produk, label antarmuka yang salah (typo), serta kegagalan query handling.
+
+---
+
+### C. Pembagian Rasio Waktu (Time Breakdown)
+*Total rasio waktu pengujian tepat 100%:*
+- **1. Pengujian dan Eksplorasi Fitur (Test Execution):** 60% (18 Menit)
+- **2. Investigasi Cacat dan Reproduksi Bug (Bug Investigation):** 30% (9 Menit)
+- **3. Penyiapan Lingkungan & Pelaporan (Setup & Reporting):** 10% (3 Menit)
+- **Total:** **100% (30 Menit)**
+
+---
+
+### D. Data Uji (Test Data)
+- **Kategori yang Diuji:** Hand Tools ) Hammer, Hand Tools ) Pliers, Power Tools ) Grinder.
+- **Kombinasi Brand:** Brand 1, Brand 2, ForgeFlex Tools.
+- **Rentang Harga Slider:** $10.00 – $25.00, $50.00 – $100.00, batas ekstrem $200.00 – $200.00.
+- **Kata Kunci Pencarian:** `hammer`, `plier`, `[script]alert(1)[/script]`, `xyz999nonexistent`, karakter spasi `   `, emoji `🔨`.
+
+---
+
+### E. Catatan Eksekusi & Observasi (Notes & Findings)
+1. **09:00 - 09:08 WIB (Eksplorasi Navigasi & Navbar):**
+   - Mengakses beranda AUT. Tampilan navbar memuat menu: Home, Categories, Contakt, Sign in.
+   - **TEMUAN 1 (Typo Antarmuka):** Link kontak pada navbar bertuliskan **"Contakt"** menggunakan huruf 'k', padahal versi benar menggunakan huruf 'c' (*Contact*).
+   - Dropdown 'Categories' di-klik: subkategori Hand Tools, Power Tools, Other tampil dengan benar. Saat memilih 'Hand Tools', grid menampilkan daftar alat tangan.
+
+2. **09:08 - 09:18 WIB (Pengujian Filter Bertingkat & Slider Harga):**
+   - Mencentang kategori 'Hammer' di sidebar: grid terfilter menampilkan palu.
+   - Menambahkan filter 'Brand 1': produk terfilter sesuai kombinasi.
+   - Menggeser slider harga ke range $10 - $25: produk di luar rentang harga berhasil disembunyikan.
+   - **TEMUAN 2 (Visual Bug pada Dropdown Sort):** Teks pada dropdown pengurutan tertulis **"Sorth"** bukannya **"Sort"**. Ini melanggar konsistensi antarmuka.
+   - Menguji filter harga ekstrem $200-$200: muncul pesan "No products found", namun layout filter sedikit bergeser.
+
+3. **09:18 - 09:27 WIB (Pencarian Cepat & Tombol Browser Back):**
+   - Mengetik `hammer` pada kolom search lalu menekan Enter.
+   - **TEMUAN 3 (Typo pada Tombol Search):** Tombol pencarian bertuliskan **"Serch"** bukannya **"Search"**.
+   - Melakukan filter kategori 'Pliers', lalu menekan tombol **Back pada browser**: URL berubah kembali ke URL awal tanpa filter, namun checkbox 'Pliers' masih terlihat tercentang di UI (State desynchronization antara URL dan UI state).
+
+4. **09:27 - 09:30 WIB (Paginasi & Konsolidasi Catatan):**
+   - Menavigasi ke halaman paginasi 2 saat filter aktif: transisi berjalan normal.
+   - Menyusun rangkuman temuan dan menyiapkan screenshot bukti.
+
+---
+
+### F. Daftar Temuan Bug & Evaluasi
+1. **BUG-001 (Minor / Low):** Salah ketik (Typo) pada menu navbar: label tautan tertulis "Contakt" bukannya "Contact".
+2. **BUG-002 (Minor / Low):** Salah ketik (Typo) pada tombol dropdown sorting katalog: tertulis "Sorth" bukannya "Sort".
+3. **BUG-003 (Minor / Low):** Salah ketik (Typo) pada tombol submit pencarian: tertulis "Serch" bukannya "Search".
+4. **BUG-008 (Major / Medium):** Tombol 'Back' browser menyebabkan desinkronisasi antara URL dan status checkbox filter kategori pada katalog produk.
+
+---
+
+### G. Dua Bug Terpenting yang Dieskalasi ke Triage Meeting
+Sesuai batas maksimal eskalasi per charter (maksimal 2 bug):
+
+1. **Bug Eskalasi 1: BUG-008 — Desinkronisasi State Filter saat Navigasi Browser Back**
+   - **Severity:** Major | **Priority:** P2
+   - **Alasan Pemilihan:** Mengganggu *user experience* dan keandalan navigasi katalog. Pelanggan dapat bingung karena UI menunjukkan filter aktif padahal data produk di halaman sudah tidak terfilter.
+   - **Evidence:** `evidence-uts/screenshots/BUG-008_browser-back-filter-inconsistency.png`
+
+2. **Bug Eskalasi 2: BUG-001 — Typo Navbar "Contakt" dan Dropdown "Sorth"**
+   - **Severity:** Minor | **Priority:** P2
+   - **Alasan Pemilihan:** Mempengaruhi persepsi profesionalitas dan kepercayaan pelanggan (*brand trust*) pada toko daring CilacapTools yang baru akan go-live.
+   - **Evidence:** `evidence-uts/screenshots/BUG-001_typo-navbar-contakt.png`
+
+---
+
+### H. Notulen Debrief Sesi dengan Test Lead
+- **Peserta Debrief:** m.fathoni (Exploratory Tester / R3) dan JarsV (Test Lead / R1)
+- **Waktu Debrief:** 22 Oktober 2026, 09:35 WIB (10 Menit)
+- **Ulasan Test Lead:**
+  - *"Rasio waktu 60/30/10 dinilai sangat baik dan produktif. Area filter dan navigasi katalog terbukti memiliki masalah sinkronisasi state browser yang perlu menjadi perhatian tim developer."*
+  - Keputusan Lead: Menyetujui eskalasi BUG-008 dan BUG-001 untuk diproses ke GitHub Issues dan ditautkan ke eksekusi Test Run Kiwi.

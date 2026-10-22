@@ -1,0 +1,97 @@
+# SESSION REPORT (SBTM - SESSION NOTES)
+## Sesi 2: Eksplorasi Halaman Detail Produk, Manipulasi Kuantitas, dan Integrasi Transisi ke Keranjang Belanja
+
+---
+
+### A. Informasi Sesi
+* **Nomor Charter:** SBTM-CH-02 (Kiwi TC #197)
+* **Penguji (Tester):** m.fathoni (NPM: 230202020 / R3 - Exploratory Tester)
+* **Test Lead / Debriefer:** JarsV (R1 - QA Lead & Test Manager)
+* **Tanggal Pelaksanaan:** 22 Oktober 2026
+* **Waktu Mulai:** 10:00 WIB
+* **Waktu Selesai:** 10:30 WIB
+* **Total Durasi:** 30 Menit (Time-Boxed)
+* **Target Aplikasi (AUT):** `https://with-bugs.practicesoftwaretesting.com`
+* **Versi / Build:** Sprint 5 - Staging (Build 14)
+* **Lingkungan Pengujian:** Windows 11 64-bit, Google Chrome v129.0.6668.71, Resolusi 1920x1080
+
+---
+
+### B. Piagam Pengujian (Charter)
+) **Tujuan Charter:**  
+) Menjelajahi transisi dari grid katalog ke halaman detail produk (`/product/{id}`), interaksi kontrol kuantitas (`-`, input langsung, `+`), produk dengan status ketersediaan berbeda (In-Stock vs Out of Stock), dan penambahan item ke keranjang belanja untuk mengidentifikasi cacat validasi logika bisnis kuantitas, duplikasi cart akibat race condition, serta inkonsistensi state keranjang.
+
+---
+
+### C. Pembagian Rasio Waktu (Time Breakdown)
+*Total rasio waktu pengujian tepat 100%:*
+- **1. Pengujian dan Eksplorasi Fitur (Test Execution):** 65% (19.5 Menit)
+- **2. Investigasi Cacat dan Reproduksi Bug (Bug Investigation):** 25% (7.5 Menit)
+- **3. Penyiapan Lingkungan & Pelaporan (Setup & Reporting):** 10% (3 Menit)
+- **Total:** **100% (30 Menit)**
+
+---
+
+### D. Data Uji (Test Data)
+- **Produk In-Stock:** Combination Pliers ($14.15), Thor Hammer ($11.14), Bolt Cutters ($48.41).
+- **Produk Out of Stock:** Long Nose Pliers ($14.15 - Stok Habis).
+- **Variasi Kuantitas:** Nilai 0, angka negatif -1, pengetikan teks 'abc', klik cepat berulang pada tombol '+', angka besar 999.
+- **Interaksi Aksi:** Single click tombol Add to cart, Rapid double click (( 200ms) pada tombol Add to cart.
+
+---
+
+### E. Catatan Eksekusi & Observasi (Notes & Findings)
+1. **10:00 - 10:10 WIB (Navigasi Detail Produk & Kontrol Kuantitas):**
+   - Dari katalog, mengklik produk "Combination Pliers". Halaman detail terbuka dengan URL `/#/product/1`.
+   - Informasi produk: Nama, harga $14.15, deskripsi, rating bintang, dan stok tersedia.
+   - Di bagian bawah terdapat bagian produk terkait, namun label judulnya bertuliskan **"Reltded products"** (Typo: huruf 'a' tertukar/hilang).
+   - Menguji kontrol kuantitas: default bernilai 1. Menekan tombol `+` bertambah menjadi 2, 3, 4. Menekan `-` berkurang hingga 1.
+
+2. **10:10 - 10:20 WIB (Manipulasi Kuantitas Ekstrem & Negatif):**
+   - Menghapus isi field quantity dan mengetik angka `0`.
+   - **TEMUAN 1 (Critical Business Logic Flaw):** Saat field quantity bernilai `0`, tombol "Add to cart" **tetap aktif dan dapat diklik**. Notifikasi toast hijau muncul *"Product added to shopping cart"*, dan keranjang belanja mencatat penambahan produk dengan kuantitas 0! Seharusnya sistem menolak atau menonaktifkan tombol bila kuantitas ( 1.
+   - Menguji kuantitas `-1`: input field menerima nilai negatif atau tombol `-` memungkinkan nilai turun di bawah batas minimum valid.
+
+3. **10:20 - 10:26 WIB (Uji Produk Out of Stock & Double Click Race Condition):**
+   - Kembali ke katalog dan mencari produk bertanda "Out of Stock" (Long Nose Pliers).
+   - Membuka halaman detail Long Nose Pliers.
+   - **TEMUAN 2 (Critical Stock Management Flaw):** Produk secara jelas berlabel *"Out of stock"*, namun tombol **"Add to cart" tetap menyala (enabled) dan dapat diklik**. Pengguna berhasil menambahkan produk yang stoknya habis ke dalam keranjang belanja!
+   - Menguji produk normal: melakukan **klik ganda (double-click) sangat cepat (( 200ms)** pada tombol "Add to cart".
+   - **TEMUAN 3 (Race Condition / Ketiadaan Debounce):** Keranjang bertambah sebanyak 2 unit padahal pengguna hanya bermaksud melakukan 1 aksi klik. Tombol tidak di-disable saat pemrosesan request pertama berlangsung.
+
+4. **10:26 - 10:30 WIB (Pemeriksaan Keranjang / Checkout & Rangkuman):**
+   - Membuka halaman keranjang belanja (`/#/checkout`).
+   - Tabel menampilkan daftar item dengan kalkulasi harga. Item kuantitas 0 dan item out of stock terlihat berada di dalam keranjang, yang dapat merusak alur checkout pembayaran.
+   - Mengumpulkan data bukti dan menyusun laporan sesi.
+
+---
+
+### F. Daftar Temuan Bug & Evaluasi
+1. **BUG-005 (Critical / High):** Field kuantitas bernilai 0 dapat ditambahkan ke keranjang belanja tanpa validasi (*Quantity 0 allowed in Cart*).
+2. **BUG-006 (Critical / High):** Produk dengan status "Out of stock" (stok habis) tombol Add to cart tetap aktif dan item dapat dimasukkan ke keranjang.
+3. **BUG-007 (Major / Medium):** Tombol "Add to cart" tidak memiliki proteksi debounce sehingga klik ganda cepat menduplikasi penambahan item ke keranjang.
+4. **Visual Bug (Minor):** Typo pada bagian produk terkait: tertulis "Reltded products" bukannya "Related products".
+
+---
+
+### G. Dua Bug Terpenting yang Dieskalasi ke Triage Meeting
+Sesuai batas maksimal eskalasi per charter (maksimal 2 bug):
+
+1. **Bug Eskalasi 1: BUG-006 — Produk Habis Stok (Out of Stock) Tetap Dapat Ditambahkan ke Keranjang**
+   - **Severity:** Critical | **Priority:** P1
+   - **Alasan Pemilihan:** Menyebabkan kegagalan operasional fatal bagi toko perkakas daring CilacapTools. Konsumen dapat membayar pesanan untuk barang yang fisiknya tidak ada, memicu komplain pelanggan, pengembalian dana (*refund*), dan merusak reputasi toko pada saat peluncuran.
+   - **Evidence:** `evidence-uts/screenshots/BUG-006_out-of-stock-bisa-add-to-cart.png`
+
+2. **Bug Eskalasi 2: BUG-005 — Penambahan Produk dengan Kuantitas 0 Diizinkan ke Keranjang Belanja**
+   - **Severity:** Critical | **Priority:** P1
+   - **Alasan Pemilihan:** Merusak kalkulasi keranjang dan integritas sistem checkout (*zero-quantity line item*). Melanggar quality gate rilis yang mensyaratkan tidak ada bug Critical/Major terbuka.
+   - **Evidence:** `evidence-uts/screenshots/BUG-005_kuantitas-nol-detail-produk.png`
+
+---
+
+### H. Notulen Debrief Sesi dengan Test Lead
+- **Peserta Debrief:** m.fathoni (Exploratory Tester / R3) dan JarsV (Test Lead / R1)
+- **Waktu Debrief:** 22 Oktober 2026, 10:35 WIB (10 Menit)
+- **Ulasan Test Lead:**
+  - *"Dua temuan pada sesi ini (BUG-005 dan BUG-006) berstatus CRITICAL dan secara langsung menggagalkan kriteria rilis Quality Gate Sprint 5. Keduanya menjadi prioritas tertinggi untuk dilaporkan ke GitHub Issues dan dibahas pada Triage Meeting."*
+  - Keputusan Lead: Menyetujui penutupan sesi SBTM-CH-02 dengan rekomendasi perbaikan mendesak pada logika validasi stok dan keranjang.
